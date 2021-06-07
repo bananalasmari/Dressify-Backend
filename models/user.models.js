@@ -22,8 +22,9 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     }
-
-
+,
+resetToken:String,
+expireToken:Date,
 },{timestmp : true})
 
 userSchema.pre("save", function(next , done){
