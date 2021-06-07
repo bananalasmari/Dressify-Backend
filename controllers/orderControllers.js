@@ -10,6 +10,12 @@ module.exports.get_orders = async (req,res) => {
     Order.find({userId}).sort({date:-1}).then(orders => res.json(orders));
 }
 
+module.exports.delete_order = async (req,res) => {
+    Order.findByIdAndDelete({ _id: req.params.orderId }).then(function (order) {
+        res.json({ success: true });
+      });
+}
+
 module.exports.checkout = async (req,res) => {
     try{
         const userId = req.params.id;
