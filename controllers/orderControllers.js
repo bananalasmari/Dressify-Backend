@@ -46,3 +46,9 @@ module.exports.checkout = async (req,res) => {
         res.status(500).send("Something went wrong");
     }
 }
+
+module.exports.delete_order = async (req,res) => {
+    Order.findByIdAndDelete({ _id: req.params.orderId }).then(function (order) {
+        res.json({ success: true });
+      });
+}
