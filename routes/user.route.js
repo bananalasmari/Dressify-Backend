@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const User = require('../models/user.models')
 const bcrypt = require('bcryptjs');
@@ -149,3 +149,4 @@ router.post('/new-password',(req,res)=>{
 })
 
 module.exports=router
+ 
