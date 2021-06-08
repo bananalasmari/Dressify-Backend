@@ -40,7 +40,10 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     }
-
+,
+resetToken:String,
+expireToken:Date,
+ 
 },{timestmp : true})
 
 userSchema.pre("save", function(next , done){
