@@ -21,6 +21,10 @@ const transport = nodemailer.createTransport(sendgridTransport({
 router.post('/', async(req,res)=>{
     try{
 const newUser =new User(req.body);
+let hash = bcrypt.hashSync(req.body.password, 10);
+    // console.log(hash);
+
+    newUser.password = hash;
 await newUser.save()
 .then( newUser =>{
 transport.sendMail({
@@ -30,6 +34,14 @@ transport.sendMail({
     html:"<h1>Welcome to dressify website </h1>"
 
 })
+// User.pre("save", function(next , done){
+//     console.log("pre save user")
+//     let salt = bcrypt.genSaltSync()
+//     let hash = bcrypt.hashSync(this.password,salt)
+//     console.log(this.password)
+//     this.password = hash
+//     next()
+// })
 })
 res.json({
     message:"thank you for creating new user"
@@ -127,25 +139,48 @@ res.json({message: "check your email"})
 
 
 
-router.post('/new-password',(req,res)=>{
+router.post('/newPassword',(req,res)=>{
+    // res.json({
+    //     message : "welcome"
+    // })
     const newPassword = req.body.password //grab the bassword from the frontend
     const sentToken = req.body.token // to save the token in the db
-    User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})//expire token should be grater then the now token
-    .then(user=>{
-        if(!user){//is the user token expired 
-            return res.status(422).json({error:"Try again session expired"})
-        }
-        bcrypt.hash(newPassword,12).then(hashedpassword=>{
-           user.password = hashedpassword
-           user.resetToken = undefined
-           user.expireToken = undefined
-           user.save().then((saveduser)=>{
-               res.json({message:"password updated success"})
-           })
-        })
-    }).catch(err=>{
-        console.log(err)
+    console.log(newPassword)
+
+    let hash = bcrypt.hashSync(newPassword, 10);
+
+    // user.password = hash;
+    
+    console.log(hash)
+const filter = { resetToken: sentToken };
+const update = { password: hash };
+User.findOneAndUpdate(filter, update)
+.then((response) => {
+        console.log(response);
     })
+    .catch((err) => {
+        console.log(err);
+        res.send("ERROR!!!");
+    })
+    // User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})//expire token should be grater then the now token
+    // .then(user=>{
+    //     if(!user){//is the user token expired 
+    //         return res.status(422).json({error:"Try again session expired"})
+    //     }
+
+    
+       
+    //     // .then(hashedpassword=>{
+    //     //    user.password = hashedpassword
+    //     //    user.resetToken = undefined
+    //     //    user.expireToken = undefined
+    //        user.save().then((saveduser)=>{
+    //            res.json({message:"password updated success"})
+    //        })
+    //     // })
+    // }).catch(err=>{
+    //     console.log(err)
+    // })
 })
 
 module.exports=router
