@@ -40,7 +40,7 @@ const ItemSchema = new Schema({
   },
   sellerID: {
     type: String,
-    required: true,
+    required: true
   },
   date_added: {
     type: Date,
