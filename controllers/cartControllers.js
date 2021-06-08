@@ -66,27 +66,6 @@ module.exports.add_cart_item = async (req,res) => {
     }
 }
 
-module.exports.empty_cart = async (req,res) => {
-    const userId = req.params.id;
-    try{
-        let cart = await Cart.findOne({userId});
-        if(cart.items.length > 0)
-        {
-            cart.items = [];
-            cart = await cart.save();
-            return res.status(201).send(cart);
-        } else {
-           console.log("Cart is already empty")
-           return res.status(201).send("Cart is already empty.");
-        }
-        
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).send("Something went wrong");
-    }
-}
-
 module.exports.delete_item = async (req,res) => {
     const userId = req.params.userId;
     const productId = req.params.itemId;
@@ -101,6 +80,27 @@ module.exports.delete_item = async (req,res) => {
         }
         cart = await cart.save();
         return res.status(201).send(cart);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send("Something went wrong");
+    }
+}
+
+module.exports.empty_cart = async (req,res) => {
+    const userId = req.params.id;
+    try{
+        let cart = await Cart.findOne({userId});
+        if(cart.items.length > 0)
+        {
+            cart.items = [];
+            cart = await cart.save();
+            return res.status(201).send(cart);
+        } else {
+           console.log("Cart is already empty")
+           return res.status(201).send("Cart is already empty.");
+        }
+        
     }
     catch (err) {
         console.log(err);
