@@ -1,6 +1,6 @@
 {
     "dbURI": "YOUR DB URI",
     "jwtsecret": "your jwt secret",
-    "StripeAPIKey": "sk_test_51IzhhsLp16KdA5QZGZfBL9Vo5luv4WMCy6bZDj3z6euTZLmYOfvLdb0wBhKyXkPpRXqbxdXCAKrfWtGRxDADGiYM000LxwGDTp"
+    "StripeAPIKey": "YOUR STRIPE SECRET API KEY"
 }
 
