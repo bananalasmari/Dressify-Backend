@@ -9,6 +9,10 @@ module.exports.get_OneItem = (req, res) => {
   Item.findOne({ _id: req.params.id }).then((item) => res.json(item));
 };
 
+module.exports.get_itemsBySeller = (req, res) => {
+  Item.find({ sellerID: req.params.id }).then((item) => res.json(item));
+};
+
 module.exports.post_item = (req, res) => {
   const newItem = new Item(req.body);
   newItem.save().then((item) => res.json(item));
