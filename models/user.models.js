@@ -43,16 +43,9 @@ const userSchema = mongoose.Schema({
 ,
 resetToken:String,
 expireToken:Date,
- 
 },{timestmp : true})
 
-userSchema.pre("save", function(next , done){
-    console.log("pre save user")
-    let salt = bcrypt.genSaltSync()
-    let hash = bcrypt.hashSync(this.password,salt)
-    this.password = hash
-    next()
-})
+
 
 
 const User = mongoose.model('User', userSchema)
