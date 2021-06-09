@@ -18,6 +18,9 @@ const transport = nodemailer.createTransport(sendgridTransport({
 
 
 }))
+
+
+
 router.post('/', async(req,res)=>{
     try{
 const newUser =new User(req.body);
@@ -59,7 +62,7 @@ res.json({
 
 
 router.post('/login', async(req,res)=>{
-    const { email, password}= req.body
+    const { email, password} = req.body
 
      try{
 
@@ -139,18 +142,22 @@ res.json({message: "check your email"})
 
 
 
-router.post('/newPassword',(req,res)=>{
+router.post('/reset/:tokenid',(req,res)=>{
+    console.log("reset password");
     // res.json({
-    //     message : "welcome"
+    //     message:"new password"
+    //     , password: newPassword,
+    //     success:true
     // })
-    const newPassword = req.body.password //grab the bassword from the frontend
-    const sentToken = req.body.token // to save the token in the db
-    console.log(newPassword)
+    const tokenID = req.params.tokenid;
+    const newPassword = req.body.password //grab the password from the frontend
+    const sentToken = req.params.tokenid // to save the token in the db
+   
 
     let hash = bcrypt.hashSync(newPassword, 10);
 
     // user.password = hash;
-    
+    console.log(newPassword)
     console.log(hash)
 const filter = { resetToken: sentToken };
 const update = { password: hash };
@@ -182,5 +189,50 @@ User.findOneAndUpdate(filter, update)
     //     console.log(err)
     // })
 })
+
+router.put("/getUserDetails/:id",protectRoute, async(req,res,next) =>{
+
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.address = req.body.address || user.address;
+      const updatedUser = await user.findByIdAndUpdate(user.name,user.email, user.address)
+      res.send({
+        _id: updatedUser.id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        address: updatedUser.address,
+        token: getToken(updatedUser),
+      });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
+  });
+
+
+    // router.post("/update-profile",protectRoute,function(req,res,next){
+
+    //     var id=req.body.user_id;
+    //     //  var profilePic= req.file.path;
+    //      User.findById(id,function(err,data){
+     
+    //     //   data.profileImage=profilePic?profilePic:data.profileImage;
+         
+    //         data.save()
+    //           .then(doc=>{
+    //              res.status(201).json({
+    //                  message:"Profile Image Updated Successfully",
+    //                  results:doc
+    //              });
+    //           })
+    //           .catch(err=>{
+    //               res.json(err);
+    //           })
+             
+    //      });
+     
+    //  });
 
 module.exports=router

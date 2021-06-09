@@ -85,8 +85,6 @@ module.exports.delete_item = async (req,res) => {
         console.log(err);
         res.status(500).send("Something went wrong");
     }
-<<<<<<< HEAD
-=======
 }
 
 module.exports.empty_cart = async (req,res) => {
@@ -108,5 +106,4 @@ module.exports.empty_cart = async (req,res) => {
         console.log(err);
         res.status(500).send("Something went wrong");
     }
->>>>>>> b41f9d9547f721cf136baf2b509ae02a0af66f6d
 }
