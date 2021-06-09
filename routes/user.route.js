@@ -72,7 +72,7 @@ router.post('/login', async(req,res)=>{
         process.env.SECRETKEY,{
         // expiresIn :60*60*1000
         })
-res.json({message : 'login success', token})
+res.json({message : 'login success', token, userID: user._id})
 
      }catch(err){
     console.log("error ! login failed")
