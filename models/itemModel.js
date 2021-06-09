@@ -30,6 +30,10 @@ const ItemSchema = new Schema({
     type: Number,
     required: true,
   },
+  size: {
+    type: String,
+    required: true,
+  },
   quantity: {
     type: Number,
     required: true,
@@ -40,7 +44,7 @@ const ItemSchema = new Schema({
   },
   sellerID: {
     type: String,
-    required: true,
+    required: true
   },
   date_added: {
     type: Date,
