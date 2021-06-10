@@ -20,5 +20,20 @@ const protectRoute = async (req,res ,next)=>{
     }
 }
 
+// const getToken = (user) => {
+//     return jwt.sign(
+//       {
+//         _id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         address: user.address,
+//       },
+     
+//       {
+       
+//       }
+//     );
+//   };
 
+  
 module.exports =protectRoute
