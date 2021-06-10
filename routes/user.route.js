@@ -45,12 +45,13 @@ transport.sendMail({
 //     this.password = hash
 //     next()
 // })
-})
 res.json({
     message:"thank you for creating new user"
     , user: newUser,
     success:true
 })
+})
+
     }catch(err){
         res.status(401).json({ name :err.name, 
         message: err.message ,
@@ -71,11 +72,11 @@ router.post('/login', async(req,res)=>{
      if(user == null )throw new Error ("this email i not in your db")
      if(!bcrypt.compareSync(password , user.password)) throw Error ('password is wrong')
      user.password = undefined
-     let token = jwt.sign({_id:user._id},
+     let token = jwt.sign({user},
         process.env.SECRETKEY,{
-        // expiresIn :60*60*1000
+        expiresIn :60*60*1000
         })
-res.json({message : 'login success', token, userID: user._id})
+res.json({message : 'login success', token, userID: user._id, type: user.type})
 
      }catch(err){
     console.log("error ! login failed")
@@ -169,42 +170,31 @@ User.findOneAndUpdate(filter, update)
         console.log(err);
         res.send("ERROR!!!");
     })
-    // User.findOne({resetToken:sentToken,expireToken:{$gt:Date.now()}})//expire token should be grater then the now token
-    // .then(user=>{
-    //     if(!user){//is the user token expired 
-    //         return res.status(422).json({error:"Try again session expired"})
-    //     }
-
-    
-       
-    //     // .then(hashedpassword=>{
-    //     //    user.password = hashedpassword
-    //     //    user.resetToken = undefined
-    //     //    user.expireToken = undefined
-    //        user.save().then((saveduser)=>{
-    //            res.json({message:"password updated success"})
-    //        })
-    //     // })
-    // }).catch(err=>{
-    //     console.log(err)
-    // })
+ 
 })
 
-router.put("/getUserDetails/:id",protectRoute, async(req,res,next) =>{
+router.post("/getUserDetails/:id",async (req,res) =>{
 
     const userId = req.params.id;
-    const user = await User.findById(userId);
+    const user =  await User.findById(userId);
+    console.log(user)
     if (user) {
       user.name = req.body.name || user.name;
+      console.log(user.name)
       user.email = req.body.email || user.email;
+      console.log(user.email)
       user.address = req.body.address || user.address;
-      const updatedUser = await user.findByIdAndUpdate(user.name,user.email, user.address)
+      console.log(user.address)
+      const updatedUser =  await user.save()
+    //   {name : user.name,email : user.email, address : user.address}
+      console.log("hahaha")
       res.send({
         _id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
         address: updatedUser.address,
-        token: getToken(updatedUser),
+  
+    
       });
     } else {
       res.status(404).send({ message: 'User Not Found' });
